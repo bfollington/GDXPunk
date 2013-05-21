@@ -36,3 +36,19 @@ Want to display an image on screen?
     world.add(e);
   
 That's it.
+
+Other Example
+=============
+
+Want to load an ogmo level?
+
+        //Create the level with origin 0, 0 (Top Left)
+        OgmoLevel ogmo = new OgmoLevel("data/level1.oel", 0, 0);
+        
+        //Load ground with Z-Layer 1
+        tileLayer = ogmo.loadTileLayer("ground", 1);
+        add(tileLayer);
+        
+        //Load all entities with Z-Layer 2
+        //GDXPunk uses Entity Lookup dictionary classes to decode the information
+        add(ogmo.loadEntityLayer("entities", 2, new TestEntityLookup()));
