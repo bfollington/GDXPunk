@@ -8,10 +8,11 @@ A Java Game Engine built on libGDX and inspired by Flashpunk. Want access to all
 Features:
 - Entities
   - Static and Animated
-  - Supporting Polygon collisions
+  - Supporting Polygon/Rectangle collisions
 - Nestable containers
   - Worlds are just containers
 - Ogmo Editor (v2) level loading and rendering
+  - Also supports (Rectangle) collisions with tilemap
 - Maintains aspect ratio
 - Clear pixel rendering (Nearest Neighbour)
 - y-Down co-ordinate system by default
@@ -20,6 +21,8 @@ In many ways this is reducing the power of libGDX by making it structured, howev
 
 To-Do:
 - Entities using Spine animations as their graphic
+- Optional polygonal tilemap collisions for slopes etc.
+- Nested containers may be redundant, possible more useful to have Scenes and Groups?
 - Attempt better scaled rendering (chunky pixels!)
 - ... Lots!
 
@@ -28,8 +31,8 @@ Example
 
 Want to display an image on screen?
 
-  world = new Container();
-  Entity e = new Entity(128, 128, "TestEntity", "data/test.png");
-  world.add(e);
+    world = new Container();
+    Entity e = new Entity(128, 128, "TestEntity", "data/test.png");
+    world.add(e);
   
 That's it.
