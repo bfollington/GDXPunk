@@ -5,7 +5,7 @@ This project is incredibly young and should not be used in any games yet.
 
 A Java Game Engine built on libGDX and inspired by Flashpunk. Want access to all the goodess libGDX supplies? Want a really simple world / entity management system? Still want to make pixel-art based games? GDXPunk.
 
-Features:
+Current Features:
 - Entities
   - Static and Animated
   - Supporting Polygon/Rectangle collisions
@@ -19,11 +19,20 @@ Features:
 
 In many ways this is reducing the power of libGDX by making it structured, however you can still easily hook in to every feature of libGDX and still should for pretty much every other aspect of development.
 
-To-Do:
+Planned Features:
 - Entities using Spine animations as their graphic
 - Optional polygonal tilemap collisions for slopes etc.
 - Nested containers may be redundant, possible more useful to have Scenes and Groups?
-- Attempt better scaled rendering (chunky pixels!)
+  - ```Addable``` interface to define what can be added to World?
+- Better Z-Ordering implementation (World contains Layers which contain Objects?)
+- Use libGDX Arrays to prevent GC problems
+- Implement chunky pixel rendering using render to texture 
+  - Note to self: http://stackoverflow.com/questions/7551669/libgdx-spritebatch-render-to-texture
+- Text class to support adding fonts to world
+- Scroll factors for layers?
+- Input wrapper to define controls
+  - Example: Control.define("jump", Input.Keys.A); if (Control.pressed("jump")) etc;
+  - Inbuilt joypad support? (Research needed)
 - ... Lots!
 
 Example
