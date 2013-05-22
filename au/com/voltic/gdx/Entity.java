@@ -52,8 +52,9 @@ public class Entity {
     
     //Collision
     protected Polygon hitbox = null;
-    protected int hitboxOffsetX, hitboxOffsetY;
+    private int hitboxOffsetX, hitboxOffsetY;
     protected Rectangle collisionZone = new Rectangle(0, 0, 256, 256);
+    protected Boolean hitboxRotates = false;
     //Layers to collide with
     private ArrayList<TileLayer> collision = new ArrayList<TileLayer>();
     
@@ -119,6 +120,12 @@ public class Entity {
             sprite.setPosition(x, y);
             log("Set provided texture: " + sprite.getWidth() + "   " + sprite.getHeight());
         }
+    }
+    
+    public void setOrigin(float x, float y, Boolean updateCollider)
+    {
+        getSprite().setOrigin(x, y);
+        if (updateCollider) hitbox.setOrigin(x - hitboxOffsetX, y - hitboxOffsetY);
     }
     
     /**

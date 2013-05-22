@@ -29,7 +29,6 @@ public class Container {
     
     public Container(String name) {
         this.name = name;
-        create();
     }
     
     /**
@@ -89,6 +88,7 @@ public class Container {
         containers.add(c);
         c.parent = this;
         c.camera = camera;
+        c.create();
         c.added();
         if (c.maxLayer > maxLayer) maxLayer = c.maxLayer;
         
