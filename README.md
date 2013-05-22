@@ -31,7 +31,7 @@ Planned Features:
 - Text class to support adding fonts to world
 - Scroll factors for layers?
 - Input wrapper to define controls
-  - Example: Control.define("jump", Input.Keys.A); if (Control.pressed("jump")) etc;
+  - Example: ```Control.define("jump", Input.Keys.A); if (Control.pressed("jump")) etc;```
   - Inbuilt joypad support? (Research needed)
 - ... Lots!
 
