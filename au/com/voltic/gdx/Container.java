@@ -19,7 +19,6 @@ public class Container {
 
     private ArrayList<Entity> entities = new ArrayList<Entity>();
     private ArrayList<TileLayer> tileLayers = new ArrayList<TileLayer>();
-    private ArrayList<Container> containers = new ArrayList<Container>();
     
     protected Container parent = null;
     
@@ -88,21 +87,6 @@ public class Container {
     }
     
     /**
-     * Add a container to this container. This is purely a superficial grouping, positions, rotations etc. are not applied recursively.
-     * @param c The Container
-     */
-    public void add(Container c)
-    {
-        containers.add(c);
-        c.parent = this;
-        c.camera = camera;
-        c.create();
-        c.added();
-        if (c.maxLayer > maxLayer) maxLayer = c.maxLayer;
-        
-    }
-    
-    /**
      * Set the layer of EVERY ELEMENT RECURSIVELY in the container.
      * 
      * Use with caution.
@@ -113,11 +97,6 @@ public class Container {
         for (Entity e : entities)
         {
             e.layer = layer;
-        }
-        
-        for (Container c : containers)
-        {
-            c.setLayer(layer);
         }
         
         for (Entity t : entities)
@@ -169,18 +148,7 @@ public class Container {
         tileLayers.remove(t);
         computeMaxLayer();
     }
-    
-    /**
-     * Remove a container from the container
-     * @param c The Container
-     */
-    public void remove(Container c)
-    {
-        containers.remove(c);
-        c.parent = null;
-        computeMaxLayer();
-    }
-    
+
     /**
      * Compute the highest layer index in every child element of everything
      */
@@ -194,12 +162,7 @@ public class Container {
             {
                 if (e.layer > maxLayer) maxLayer = e.layer;
             }
-            
-            for (Container c : containers)
-            {
-                if (c.maxLayer > maxLayer) maxLayer = c.maxLayer;
-            }
-            
+
             for (Entity t : entities)
             {
                 if (t.layer > maxLayer) maxLayer = t.layer;
@@ -223,11 +186,6 @@ public class Container {
         for (Entity e : entities)
         {
             e.update();
-        }
-        
-        for (Container c : containers)
-        {
-            c.update();
         }
         
         if (drawDebug) debugPolygons = getPolygons();
@@ -260,10 +218,6 @@ public class Container {
         for (int i = maxLayer; i >= 0; i--)
         {
             drawLayer(batch, i);
-            for (Container c : containers)
-            {
-                c.drawLayer(batch, i);
-            }
         }
         
         if (drawDebug)
@@ -303,11 +257,6 @@ public class Container {
         {
             t.dispose();
         }
-        
-        for (Container c : containers)
-        {
-            c.dispose();
-        }
     }
     
     protected void log(String str)
@@ -329,11 +278,6 @@ public class Container {
     {
         maxLayer = layers;
         
-        for (Container c : containers)
-        {
-            c.setFixedLayerCount(layers);
-        }
-        
         fixedMaxLayer = true;
     }
     
@@ -343,11 +287,6 @@ public class Container {
     public void setFlexibleLayerCount()
     {
         fixedMaxLayer = false;
-        
-        for (Container c : containers)
-        {
-            c.setFlexibleLayerCount();
-        }
         
         computeMaxLayer();
     }
@@ -374,12 +313,13 @@ public class Container {
         for (TileLayer t : tileLayers){
             t.setRenderBounds(x, y, width, height);
         }
-        
-        for (Container c : containers){
-            c.setRenderBounds(x, y, width, height);
-        }
     }
     
+    /**
+     * Return a list of entities within a rectangle
+     * @param r
+     * @return List of entities
+     */
     public ArrayList<Entity> getEntitiesWithinZone(Rectangle r)
     {
         return getEntitiesWithinZone(r.x, r.y, r.width, r.height);
@@ -404,15 +344,14 @@ public class Container {
                 ents.add(e);
             }
         }
-        
-        for (Container c : containers)
-        {
-            ents.addAll(c.getEntitiesWithinZone(x, y, width, height));
-        }
 
         return ents;
     }
     
+    /**
+     * Get a list of all collision polygons from every entity in the world.
+     * @return List of polys
+     */
     public ArrayList<Polygon> getPolygons()
     {
         ArrayList<Polygon> polys = new ArrayList<Polygon>();
@@ -420,11 +359,6 @@ public class Container {
         for (Entity e : entities)
         {
             if (e.hitbox != null) polys.add(e.hitbox);
-        }
-        
-        for (Container c : containers)
-        {
-            polys.addAll(c.getPolygons());
         }
 
         return polys;
