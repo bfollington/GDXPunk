@@ -1,8 +1,6 @@
 package au.com.voltic.gdx;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-
 
 import au.com.voltic.gdx.ogmo.TileLayer;
 
@@ -15,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.ObjectMap;
 
 /**
  * This is intended to closely match the functionality of the Entity class available in Flashpunk.
@@ -38,9 +37,13 @@ public class Entity {
     /** Using a y-Down co-ordinate system like THE REST OF THE WORLD? */
     public Boolean ydown = true;
     
+    //Rendering
+    public Entity renderNext = null;
+    public Entity renderPrev = null;
+    
     //Animation
     private int frameTicker = 0;
-    private HashMap<String, Animation> animations = new HashMap<String, Animation>();
+    private ObjectMap<String, Animation> animations = new ObjectMap<String, Animation>();
     private String currentAnimation = "";
     private int currentFrame = 0;
     private Boolean animationPlaying = true;
@@ -59,7 +62,7 @@ public class Entity {
     private ArrayList<TileLayer> collision = new ArrayList<TileLayer>();
     
     //Container
-    public int layer = 0;
+    private int layer = 0;
     public World world;
     public World container;
     
@@ -447,12 +450,6 @@ public class Entity {
         collisionZone.setX(x - collisionZone.width / 2);
         collisionZone.setY(y - collisionZone.height / 2);
         
-        if (container.maxLayerCountIsFixed() && (container.getMaxLayer() < layer))
-        {
-            System.err.println(name + ": My layer is set to a value outside the allowed maximum. I have had it reset to: " + container.getMaxLayer());
-            layer = container.getMaxLayer();
-        }
-        
         if (hitbox != null)
         { 
             hitbox.setPosition(x + hitboxOffsetX, y + hitboxOffsetY);
@@ -542,6 +539,39 @@ public class Entity {
         log("Disposing");
         if (spritesheet != null) spritesheet.dispose();
         if (sprite.getTexture() != null) sprite.getTexture().dispose();
+    }
+    
+    public void setLayer(int layer)
+    {
+        if (world == null)
+        {
+            this.layer = layer;
+            return;
+        }
+        
+        log("Setting layer to: " + layer + " My world is " + world);
+        
+        world.removeEntityFromLayer(this, this.layer);
+        this.layer = layer;
+        
+        log("Adjust linked list");
+        
+        if (renderPrev != null && this.renderNext.renderPrev != null)
+            this.renderNext.renderPrev = this.renderPrev;
+
+        if (renderNext != null && this.renderPrev.renderNext != null)
+            this.renderPrev.renderNext = this.renderNext;   
+        log("Set rendering lists");
+        
+        renderNext = null;
+        renderPrev = null;
+        
+        world.setUpRendering(this);
+    }
+    
+    public int getLayer()
+    {
+        return layer;
     }
 
     

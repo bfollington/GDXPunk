@@ -1,10 +1,9 @@
 package au.com.voltic.gdx;
 
 import java.util.ArrayList;
-import java.util.List;
-
 
 import au.com.voltic.gdx.ogmo.TileLayer;
+import au.com.voltic.lidgdxtest.JFoods;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
@@ -14,23 +13,31 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap;
 
 public class World {
+    
+    //TODO moveForward(Entity e)
+    //TODO moveBack(Entity e)
+    //TODO bringToFront(Entity e)
+    //TODO sendToBack(Entity e)
 
     private ArrayList<Entity> entities = new ArrayList<Entity>();
-    private ArrayList<TileLayer> tileLayers = new ArrayList<TileLayer>();
+    private ArrayList<Group> groups = new ArrayList<Group>();
     
     protected World parent = null;
     
-    private ArrayList<Polygon> debugPolygons;
+    private Array<Polygon> debugPolygons;
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
     
     public Boolean drawDebug = false;
     
-    public Camera camera;
+    //Rendering
+    private ObjectMap<Integer, Entity> renderingLayers = new ObjectMap<Integer, Entity>();
+    private ObjectMap<Integer, TileLayer> tileLayers = new ObjectMap<Integer, TileLayer>();
     
-    private int maxLayer = 0;
-    private Boolean fixedMaxLayer = false;
+    public Camera camera;
     
     private String name = "DEFAULT_NAME";
     
@@ -45,21 +52,67 @@ public class World {
     public void add(Entity e)
     {
         entities.add(e);
-        e.added();
         e.container = this;
-        e.world = getParent();
-        if (e.layer > maxLayer) maxLayer = e.layer;
+        e.world = this;
+        
+        setUpRendering(e);
+        e.added();
+    }
+    
+    public void setUpRendering(Entity e)
+    {
+        if (e.world == null) return;
+        
+        if (!renderingLayers.containsKey(e.getLayer()))
+        {
+            renderingLayers.put(e.getLayer(), e);
+        } else {
+            Entity current = renderingLayers.get(e.getLayer());
+            while (current.renderNext != null)
+            {
+                current = current.renderNext;
+            }
+            current.renderNext = e;
+        }
+    }
+    
+    public void removeEntityFromLayer(Entity e, int layer)
+    {
+        if (renderingLayers.get(layer) != e) return;
+        
+        if (renderingLayers.get(layer) == null) return;
+        
+        if (renderingLayers.get(layer).renderNext != null)
+        {
+            renderingLayers.put(layer, renderingLayers.get(layer).renderNext);
+        } else {
+            renderingLayers.remove(layer);
+        }
     }
     
     /**
      * Add a list of Entities
      * @param list
      */
-    public void add(List<Entity> list)
+    public void add(Array<Entity> list)
     {
         for (Entity e : list)
         {
             if (e != null) add(e);
+        }
+    }
+    
+    public void add(Group g)
+    {   
+        groups.add(g);
+        for (int i = 0; i < g.size(); i++)
+        {
+            entities.add(g.get(i));
+            g.get(i).container = this;
+            g.get(i).world = this;
+            
+            setUpRendering(g.get(i));
+            g.get(i).added();
         }
     }
     
@@ -82,27 +135,8 @@ public class World {
      */
     public void add(TileLayer t)
     {
-        tileLayers.add(t);
-        if (t.layer > maxLayer) maxLayer = t.layer;
-    }
-    
-    /**
-     * Set the layer of EVERY ELEMENT RECURSIVELY in the container.
-     * 
-     * Use with caution.
-     * @param layer Layer to set to
-     */
-    public void setLayer(int layer)
-    {
-        for (Entity e : entities)
-        {
-            e.layer = layer;
-        }
-        
-        for (Entity t : entities)
-        {
-            t.layer = layer;
-        }
+        t.world = this;
+        tileLayers.put(t.layer, t);
     }
     
     /**
@@ -124,7 +158,6 @@ public class World {
     {
         entities.remove(e);
         e.world = null;
-        computeMaxLayer();
     }
     
     /**
@@ -145,28 +178,14 @@ public class World {
      */
     public void remove(TileLayer t)
     {
-        tileLayers.remove(t);
-        computeMaxLayer();
+        tileLayers.remove(t.layer);
     }
-
-    /**
-     * Compute the highest layer index in every child element of everything
-     */
-    private void computeMaxLayer()
+    
+    public void remove(Group g)
     {
-        if (!fixedMaxLayer)
+        for (int i = 0; i < g.size(); i++)
         {
-            maxLayer = 0;
-            
-            for (Entity e : entities)
-            {
-                if (e.layer > maxLayer) maxLayer = e.layer;
-            }
-
-            for (Entity t : entities)
-            {
-                if (t.layer > maxLayer) maxLayer = t.layer;
-            }
+            g.get(i).world.remove(g.get(i));
         }
     }
     
@@ -185,29 +204,22 @@ public class World {
     {
         for (Entity e : entities)
         {
-            e.update();
+            e.update(); 
+        }
+        
+        for (Group g : groups)
+        {
+            g.update();
         }
         
         if (drawDebug) debugPolygons = getPolygons();
-    }
-    
-    /**
-     * Draw children on a specified layer.
-     * @param batch
-     * @param layer
-     */
-    protected void drawLayer(SpriteBatch batch, int layer)
-    {
-        for (TileLayer t : tileLayers)
-        {
-            if (t.layer == layer) t.draw(batch);
-        }
         
-        for (Entity e : entities)
-        {
-            if (e.layer == layer) e.draw(batch);
-        }
+        setRenderBounds((int)camera.position.x - JFoods.VIRTUAL_WIDTH / 2 - JFoods.TILE_SIZE,
+                (int)camera.position.y - JFoods.VIRTUAL_HEIGHT / 2 - + JFoods.TILE_SIZE,
+                JFoods.VIRTUAL_WIDTH + (JFoods.TILE_SIZE * 2),
+                JFoods.VIRTUAL_HEIGHT + (JFoods.TILE_SIZE * 2));
     }
+
     
     /**
      * Draw this World
@@ -215,10 +227,37 @@ public class World {
      */
     public void draw(SpriteBatch batch)
     {
-        for (int i = maxLayer; i >= 0; i--)
+        //TODO There are probably performance enhancements to be done
+        Entity first;
+        
+        Array<Integer> keys = new Array<Integer>();
+        
+        for (int i : renderingLayers.keys()) keys.add(i);
+        for (int i : tileLayers.keys()) if (!keys.contains(i, true)) keys.add(i);
+        keys.sort();
+        
+        for (int i : keys)
         {
-            drawLayer(batch, i);
+            if (tileLayers.get(i) != null)
+            {
+                tileLayers.get(i).draw(batch);
+            }
+            
+            if (renderingLayers.get(i) != null)
+            { 
+                //log("Draw layer: " + i);
+                first = renderingLayers.get(i);
+                first.draw(batch);
+                
+                while (first.renderNext != null)
+                {
+                    first = first.renderNext;
+                    first.draw(batch);
+                }
+            }
         }
+        
+       // log("Drew!");
         
         if (drawDebug)
         {
@@ -253,7 +292,7 @@ public class World {
             e.dispose();
         }
         
-        for (TileLayer t : tileLayers)
+        for (TileLayer t : tileLayers.values())
         {
             t.dispose();
         }
@@ -270,38 +309,6 @@ public class World {
     }
     
     /**
-     * If there is a definite number of in your game, this will allow you to enforce that.
-     * It also makes the remove() operation much more efficient.
-     * @param layers
-     */
-    public void setFixedLayerCount(int layers)
-    {
-        maxLayer = layers;
-        
-        fixedMaxLayer = true;
-    }
-    
-    /**
-     * Never worry about your layer count and set it willy nilly!
-     */
-    public void setFlexibleLayerCount()
-    {
-        fixedMaxLayer = false;
-        
-        computeMaxLayer();
-    }
-    
-    public int getMaxLayer()
-    {
-        return maxLayer;
-    }
-    
-    public Boolean maxLayerCountIsFixed()
-    {
-        return fixedMaxLayer;
-    }
-    
-    /**
      * Update the RenderBounds of every TileLayer recursively.
      * @param x
      * @param y
@@ -310,7 +317,7 @@ public class World {
      */
     public void setRenderBounds(int x, int y, int width, int height)
     {
-        for (TileLayer t : tileLayers){
+        for (TileLayer t : tileLayers.values()){
             t.setRenderBounds(x, y, width, height);
         }
     }
@@ -352,9 +359,9 @@ public class World {
      * Get a list of all collision polygons from every entity in the world.
      * @return List of polys
      */
-    public ArrayList<Polygon> getPolygons()
+    public Array<Polygon> getPolygons()
     {
-        ArrayList<Polygon> polys = new ArrayList<Polygon>();
+        Array<Polygon> polys = new Array<Polygon>();
         
         for (Entity e : entities)
         {

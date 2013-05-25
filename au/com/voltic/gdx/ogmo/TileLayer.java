@@ -2,18 +2,17 @@ package au.com.voltic.gdx.ogmo;
 
 import java.util.Arrays;
 
+import au.com.voltic.gdx.World;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 
 public class TileLayer {
-    
-    //TODO Parallax scrolling?
     
     private int TILE_SIZE, WIDTH, HEIGHT;
     private int startRenderX, startRenderY, endRenderX, endRenderY;
@@ -21,6 +20,11 @@ public class TileLayer {
     private Texture tileset;
     private Boolean ydown;
     public float x, y;
+    public float scrollFactorX = 0;
+    public float scrollFactorY = 0;
+    
+    public World world = null;
+    public Boolean usesScrollFactor = false;
     
     public int layer = 0;
     
@@ -139,6 +143,12 @@ public class TileLayer {
      */
     public void draw(SpriteBatch batch)
     {
+        if (world != null && usesScrollFactor)
+        {
+            x = world.camera.position.x * scrollFactorX;
+            y = world.camera.position.y * scrollFactorY;
+        }
+        
         int multi = 1;
         if (!ydown) multi = -1;
         
