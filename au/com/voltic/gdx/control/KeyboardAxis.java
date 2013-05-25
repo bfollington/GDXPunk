@@ -1,8 +1,6 @@
 package au.com.voltic.gdx.control;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.controllers.Controllers;
 
     public class KeyboardAxis extends Axis
     {

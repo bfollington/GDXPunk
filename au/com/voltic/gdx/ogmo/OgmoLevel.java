@@ -1,12 +1,10 @@
 package au.com.voltic.gdx.ogmo;
 
 import java.io.IOException;
-import java.util.ArrayList;
-
-
 import au.com.voltic.gdx.Entity;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
 
@@ -45,6 +43,7 @@ public class OgmoLevel {
         tileLayer.loadCsvString(layerNode.getText());
         tileLayer.x = offsetX;
         tileLayer.y = offsetY;
+        tileLayer.layer = layer;
         
         return tileLayer;
     }
@@ -56,11 +55,11 @@ public class OgmoLevel {
      * @param dict The Entity lookup class used to decide which entity to create.
      * @return List of entities created.
      */
-    public ArrayList<Entity> loadEntityLayer(String name, int layer, EntityLookup dict)
+    public Array<Entity> loadEntityLayer(String name, int layer, EntityLookup dict)
     {
         Element layerNode = level.getChildByName(name);
         
-        ArrayList<Entity> res = new ArrayList<Entity>();
+        Array<Entity> res = new Array<Entity>();
         
         for (int i = 0; i < layerNode.getChildCount(); i++)
         {
@@ -70,14 +69,6 @@ public class OgmoLevel {
         }
         
         return res;
-    }
-
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        // TODO Auto-generated method stub
-
     }
 
 }

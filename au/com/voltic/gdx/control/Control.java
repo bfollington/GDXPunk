@@ -8,10 +8,6 @@ public class Control {
     private static ArrayMap<String, Array<Axis>> axes = new ArrayMap<String, Array<Axis>>();
     private static ArrayMap<String, Array<Button>> buttons = new ArrayMap<String, Array<Button>>();
 
-    public Control() {
-        // TODO Auto-generated constructor stub
-    }
-
     /**
      * Define a new axis with a name, names can correspond to multiple axes.
      * @param name
