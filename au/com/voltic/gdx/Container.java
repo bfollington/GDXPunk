@@ -8,7 +8,10 @@ import au.com.voltic.gdx.ogmo.TileLayer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 
@@ -19,6 +22,11 @@ public class Container {
     private ArrayList<Container> containers = new ArrayList<Container>();
     
     protected Container parent = null;
+    
+    private ArrayList<Polygon> debugPolygons;
+    private ShapeRenderer shapeRenderer = new ShapeRenderer();
+    
+    public Boolean drawDebug = false;
     
     public Camera camera;
     
@@ -221,6 +229,8 @@ public class Container {
         {
             c.update();
         }
+        
+        if (drawDebug) debugPolygons = getPolygons();
     }
     
     /**
@@ -254,6 +264,28 @@ public class Container {
             {
                 c.drawLayer(batch, i);
             }
+        }
+        
+        if (drawDebug)
+        {
+            batch.end();
+            
+            Gdx.gl.glEnable(GL10.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+            shapeRenderer.setProjectionMatrix(camera.combined);
+                    
+            shapeRenderer.begin(ShapeType.Line);
+            for (Polygon r : debugPolygons)
+            {
+                shapeRenderer.setColor(0f, 1f, 0f, 0.5f);
+                shapeRenderer.polygon(r.getTransformedVertices());
+                shapeRenderer.setColor(1f, 0f, 1f, 0.5f);
+                shapeRenderer.rect(r.getBoundingRectangle().x, r.getBoundingRectangle().y, r.getBoundingRectangle().width, r.getBoundingRectangle().height);
+            }
+            shapeRenderer.end();
+            Gdx.gl.glDisable(GL10.GL_BLEND);
+            
+            batch.begin();
         }
     }
     

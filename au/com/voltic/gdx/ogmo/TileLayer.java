@@ -58,10 +58,10 @@ public class TileLayer {
         if (width < 0) width = 0;
         if (height < 0) height = 0;
         
-        startRenderX = x / TILE_SIZE;
-        startRenderY = y / TILE_SIZE;
-        endRenderX   = (x + width) / TILE_SIZE;
-        endRenderY   = (y + height) / TILE_SIZE;
+        startRenderX = Math.max(0, (int) ((x - this.x) / TILE_SIZE));
+        startRenderY = Math.max(0, (int) ((y - this.y) / TILE_SIZE));
+        endRenderX   = Math.max(0, (int) ((x - this.x + width) / TILE_SIZE));
+        endRenderY   = Math.max(0, (int) ((y - this.y + height) / TILE_SIZE));
     }
     
     public Boolean collision(Polygon poly)
