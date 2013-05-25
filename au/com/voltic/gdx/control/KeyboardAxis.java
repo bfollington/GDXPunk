@@ -23,4 +23,34 @@ import com.badlogic.gdx.controllers.Controllers;
             
             return 0;
         }
+        
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + neg;
+            result = prime * result + pos;
+            return result;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            KeyboardAxis other = (KeyboardAxis) obj;
+            if (neg != other.neg)
+                return false;
+            if (pos != other.pos)
+                return false;
+            return true;
+        }
+
+        public String toString()
+        {
+            return "Pos: " + pos + " Neg: " + neg;
+        }
     }
