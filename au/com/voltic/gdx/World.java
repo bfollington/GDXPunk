@@ -15,12 +15,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 
-public class Container {
+public class World {
 
     private ArrayList<Entity> entities = new ArrayList<Entity>();
     private ArrayList<TileLayer> tileLayers = new ArrayList<TileLayer>();
     
-    protected Container parent = null;
+    protected World parent = null;
     
     private ArrayList<Polygon> debugPolygons;
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
@@ -34,7 +34,7 @@ public class Container {
     
     private String name = "DEFAULT_NAME";
     
-    public Container(String name) {
+    public World(String name) {
         this.name = name;
     }
     
@@ -67,7 +67,7 @@ public class Container {
      * Retrieve the highest level parent of the container.
      * @return Highest level parent (a.k.a. world)
      */
-    public Container getParent()
+    public World getParent()
     {
         if (parent == null)
         {
@@ -210,7 +210,7 @@ public class Container {
     }
     
     /**
-     * Draw this Container and all Sub-Containers and Children
+     * Draw this World
      * @param batch
      */
     public void draw(SpriteBatch batch)
@@ -261,12 +261,12 @@ public class Container {
     
     protected void log(String str)
     {
-        Gdx.app.log("Container", str);
+        Gdx.app.log("World", str);
     }
     
     public String toString()
     {
-        return "Container: " + name;
+        return "World: " + name;
     }
     
     /**

@@ -60,8 +60,8 @@ public class Entity {
     
     //Container
     public int layer = 0;
-    public Container world;
-    public Container container;
+    public World world;
+    public World container;
     
     public Entity() {
         this(0, 0, "");
