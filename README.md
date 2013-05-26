@@ -22,6 +22,18 @@ Current Features:
 - Input
   - Static input manager that can define Keyboard and Joystick controls using names
   - Allows multiple control schemes easily and redefining of controls
+- Simple Game class for handling resizing, rendering, resolution etc.
+
+Notes:
+- Projects MUST have the Gdx-Controllers extension added to them, see: http://www.badlogicgames.com/wordpress/?p=2743 for set up
+- In the desktop project the following parts of cfg should be defined:
+
+        cfg.width = 960;
+        cfg.height = 640;
+        cfg.foregroundFPS = 60;
+        cfg.backgroundFPS = -1;
+
+- They do not have to use these values, but without an FPS limit the engine will go crazy fast
 
 In many ways this is reducing the power of libGDX by making it structured, however you can still easily hook in to every feature of libGDX and still should for pretty much every other aspect of development.
 
@@ -71,3 +83,51 @@ Input Management
     
     //In update()
     if (Control.checkButton("jump")) jump();
+    
+    
+Game Example
+=============
+
+Want to make a new game?
+
+    public class MyGame extends Game implements ApplicationListener {
+        
+        @Override
+        public void create() 
+      	{
+      	    super.create(480, 320);
+      		
+              changeWorld(new TestWorld());
+      	}
+      
+      	@Override
+      	public void dispose()
+      	{
+      	    super.dispose();
+      	}
+      
+      	@Override
+      	public void render()
+      	{		
+      	    super.render();
+      	}
+      	
+      	@Override
+      	public void update()
+      	{
+      	    super.update();
+      	}
+      
+      	@Override
+      	public void resize(int width, int height) {
+      	    super.resize(width, height);
+      	}
+      
+      	@Override
+      	public void pause() {
+      	}
+      
+      	@Override
+      	public void resume() {
+      	}
+    }
