@@ -3,7 +3,7 @@ package au.com.voltic.gdx;
 import java.util.ArrayList;
 
 import au.com.voltic.gdx.ogmo.TileLayer;
-import au.com.voltic.lidgdxtest.JFoods;
+import au.com.voltic.lidgdxtest.MyGame;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
@@ -220,10 +220,10 @@ public class World {
         
         if (drawDebug) debugPolygons = getPolygons();
         
-        setRenderBounds((int)camera.position.x - JFoods.VIRTUAL_WIDTH / 2 - JFoods.TILE_SIZE,
-                (int)camera.position.y - JFoods.VIRTUAL_HEIGHT / 2 - + JFoods.TILE_SIZE,
-                JFoods.VIRTUAL_WIDTH + (JFoods.TILE_SIZE * 2),
-                JFoods.VIRTUAL_HEIGHT + (JFoods.TILE_SIZE * 2));
+        setRenderBounds((int)camera.position.x - MyGame.VIRTUAL_WIDTH / 2 - MyGame.TILE_SIZE,
+                (int)camera.position.y - MyGame.VIRTUAL_HEIGHT / 2 - + MyGame.TILE_SIZE,
+                MyGame.VIRTUAL_WIDTH + (MyGame.TILE_SIZE * 2),
+                MyGame.VIRTUAL_HEIGHT + (MyGame.TILE_SIZE * 2));
     }
 
     
