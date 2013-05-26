@@ -26,6 +26,7 @@ import com.badlogic.gdx.controllers.Controllers;
         @Override
         public float check()
         {
+            if (Controllers.getControllers().size <= controller) return 0;
             if (axis != -1) return Controllers.getControllers().get(controller).getAxis(axis);
             else {
                 if (Controllers.getControllers().get(controller).getButton(pos)) return 1;

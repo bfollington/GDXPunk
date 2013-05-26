@@ -14,6 +14,7 @@ public class ControllerButton extends Button {
     
     @Override
     public Boolean check() {
+        if (Controllers.getControllers().size <= controller) return false;
         if (Controllers.getControllers().get(controller).getButton(button)) return true;
         
         return false;
