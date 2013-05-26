@@ -8,6 +8,7 @@ import au.com.voltic.lidgdxtest.JFoods;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -27,6 +28,8 @@ public class World {
     private ArrayList<Group> groups = new ArrayList<Group>();
     
     protected World parent = null;
+    
+    private BitmapFont font = new BitmapFont(true);
     
     private Array<Polygon> debugPolygons;
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
@@ -51,9 +54,12 @@ public class World {
      */
     public void add(Entity e)
     {
-        entities.add(e);
-        e.container = this;
-        e.world = this;
+        if (!entities.contains(e))
+        {
+            entities.add(e);
+            e.container = this;
+            e.world = this;
+        }
         
         setUpRendering(e);
         e.added();
@@ -279,6 +285,9 @@ public class World {
             Gdx.gl.glDisable(GL10.GL_BLEND);
             
             batch.begin();
+            
+            font.draw(batch, "ENTS: " + this.objectCount(), 0, 15);
+            font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 0, 0);
         }
     }
     
@@ -371,4 +380,8 @@ public class World {
         return polys;
     }
 
+    public int objectCount()
+    {
+        return entities.size();
+    }
 }
