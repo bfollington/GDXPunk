@@ -25,6 +25,11 @@ public abstract class Game {
     
     private static final float ASPECT_RATIO = (float)VIRTUAL_WIDTH/(float)VIRTUAL_HEIGHT;
     
+    /**
+     * Called when the application is first started.
+     * @param width The virtual width of the render window
+     * @param height The virtual height of the render window
+     */
     public void create(int width, int height) {
         VIRTUAL_WIDTH = width;
         VIRTUAL_HEIGHT = height;
@@ -38,12 +43,18 @@ public abstract class Game {
         
     }
     
+    /**
+     * Called when the application ends
+     */
     public void dispose()
     {
         batch.dispose();
         world.dispose();
     }
     
+    /**
+     * Called once every frame to draw to the screen
+     */
     public void render()
     {
         update();
@@ -65,6 +76,9 @@ public abstract class Game {
         batch.end();
     }
     
+    /**
+     * Called once every frame to update logic
+     */
     public void update()
     {
         UNIT_WIDTH = ACTUAL_WIDTH / VIRTUAL_WIDTH;
@@ -73,6 +87,11 @@ public abstract class Game {
         world.update();
     }
     
+    /**
+     * Called when the application window is resized
+     * @param width The new width
+     * @param height The new heigth
+     */
     public void resize(int width, int height)
     {
         
@@ -104,9 +123,13 @@ public abstract class Game {
         viewport = new Rectangle(crop.x, crop.y, w, h);
     }
     
-    public static void changeWorld(World c)
+    /**
+     * Call this to change the current world
+     * @param w World to change to
+     */
+    public static void changeWorld(World w)
     {
-        world = c;
+        world = w;
         world.camera = camera;
         world.create();
     }
