@@ -27,6 +27,8 @@ In many ways this is reducing the power of libGDX by making it structured, howev
 
 Planned Features:
 - Entities using Spine animations as their graphic
+- Loading textures from atlases
+- Creating animations from a sequence of single images
 - Optional polygonal tilemap collisions for slopes etc.
 - Implement chunky pixel rendering using render to texture 
   - Note to self: http://stackoverflow.com/questions/7551669/libgdx-spritebatch-render-to-texture
