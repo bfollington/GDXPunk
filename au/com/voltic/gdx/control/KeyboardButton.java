@@ -12,9 +12,6 @@ public class KeyboardButton extends Button {
     
     @Override
     public Boolean check() {
-        if (Gdx.input.isButtonPressed(key)) return true;
-        
-        return false;
+        return Gdx.input.isKeyPressed(key);
     }
-
 }
