@@ -5,24 +5,31 @@ This project is incredibly young and should not be used in any games yet.
 
 A Java Game Engine built on libGDX and inspired by Flashpunk. Want access to all the goodess libGDX supplies? Want a really simple world / entity management system? Still want to make pixel-art based games? GDXPunk.
 
+**GDXPunk does not currently support Android (though, you may be able to get it to work) and has no plans to.**
+
 Current Features:
-- Entities
-  - Static and Animated
+- ```Entity```
+  - Static Image or Animated
   - Supporting Polygon/Rectangle collisions
-- Grouping of entities
+- ```Group```
+  - Collection of Entities
   - Logic can be applied to the entire group
-- Ogmo Editor (v2) level loading and rendering
-  - Also supports (Rectangle) collisions with tilemap
-- Maintains aspect ratio for you
-- Clear pixel rendering (Nearest Neighbour)
-- y-Down co-ordinate system by default
-- Comprehensive Z-Ordered rendering system, with layers and ordering within them
-  - This is a little performance intensive due to linked-list implementation
-  - Layers can have scrolling factors applied for parallax or HUD implementation
-- Input
+  - Useful for HUD etc.
+- ```OgmoLevel```
+  - Ogmo Editor (v2) level loading and rendering
+  - Supports (Rectangle) collisions with tilemap
+- ```Game```
+  - Maintains aspect ratio for you
+  - Clear pixel rendering (Nearest Neighbour)
+  - y-Down co-ordinate system by default
+  - Handles resolution etc.
+- ```World```
+  - Comprehensive Z-Ordered rendering system, with layers and ordering within them
+    - This is a little performance intensive due to linked-list implementation
+    - Layers can have scrolling factors applied for parallax or HUD implementation
+- ```Control```
   - Static input manager that can define Keyboard and Joystick controls using names
   - Allows multiple control schemes easily and redefining of controls
-- Simple Game class for handling resizing, rendering, resolution etc.
 
 Notes:
 - Projects MUST have the Gdx-Controllers extension added to them, see: http://www.badlogicgames.com/wordpress/?p=2743 for set up
@@ -38,14 +45,19 @@ Notes:
 In many ways this is reducing the power of libGDX by making it structured, however you can still easily hook in to every feature of libGDX and still should for pretty much every other aspect of development.
 
 Planned Features:
-- Entities using Spine animations as their graphic
-- Loading textures from atlases (for Entities or TileLayers)
-- Creating animations from a sequence of single images
-- Optional polygonal tilemap collisions for slopes etc.
+- ```Entities```
+  - Use Spine animations as graphic
+  - Use Rectangle as graphic
+  - Use Circle as graphic
+  - Use Line as graphic
+  - Creating animations from a sequence of single images
+  - Loading textures from atlases (for Entities or TileLayers)
+- ```TileLayers```
+  - Optional polygonal tilemap collisions for slopes etc.
 - Implement chunky pixel rendering using render to texture 
   - Note to self: http://stackoverflow.com/questions/7551669/libgdx-spritebatch-render-to-texture
   - Having done testing, performance is very poor with render-to-texture...
-- Text class to support adding fonts to world (Extends ```BitmapFont```)
+- Add ```Text``` class to support adding fonts to world (Extends ```BitmapFont```)
 
 Entity Example
 =======
