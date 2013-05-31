@@ -7,6 +7,8 @@ public class Control {
     
     private static ArrayMap<String, Array<Axis>> axes = new ArrayMap<String, Array<Axis>>();
     private static ArrayMap<String, Array<Button>> buttons = new ArrayMap<String, Array<Button>>();
+    
+    public static Boolean enableJoypadInput = true;
 
     /**
      * Define a new axis with a name, names can correspond to multiple axes.
