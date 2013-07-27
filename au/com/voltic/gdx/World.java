@@ -29,7 +29,9 @@ public class World {
     
     protected World parent = null;
     
-    private BitmapFont font = new BitmapFont(true);
+    private BitmapFont font = new BitmapFont(Gdx.files.internal("data/font.fnt"),
+                                             Gdx.files.internal("data/font.png"),
+                                             true);
     
     private Array<Polygon> debugPolygons;
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
@@ -286,8 +288,8 @@ public class World {
             
             batch.begin();
             
-            font.draw(batch, "ENTS: " + this.objectCount(), 0, 15);
-            font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 0, 0);
+            font.draw(batch, "ENTS: " + this.objectCount(), 4, 30);
+            font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 4, 20);
         }
     }
     

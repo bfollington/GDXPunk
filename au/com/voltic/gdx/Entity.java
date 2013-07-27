@@ -212,6 +212,17 @@ public class Entity {
     
     //TODO Collide with a list of types
     
+    public Entity collide(ArrayList<String> listOfTypes)
+    {
+        for (String s : listOfTypes)
+        {
+            collide(s, 0, 0);
+        }
+        
+        return null;
+    }
+    
+    //TODO fix JavaDoc
     /**
      * Perform a collision by name (looking for a specific entity) within a zone. Use zone with caution to prevent excessive checking.
      * @param name The name of the entity to attempt collision with
