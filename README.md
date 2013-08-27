@@ -58,6 +58,7 @@ Planned Features:
   - Note to self: http://stackoverflow.com/questions/7551669/libgdx-spritebatch-render-to-texture
   - Having done testing, performance is very poor with render-to-texture...
 - Add ```Text``` class to support adding fonts to world (Extends ```BitmapFont```)
+- Look into optimised collision handling (perhaps ```Entity```s have a collided() function?)
 
 Entity Example
 =======
