@@ -59,6 +59,7 @@ Planned Features:
   - Having done testing, performance is very poor with render-to-texture...
 - Add ```Text``` class to support adding fonts to world (Extends ```BitmapFont```)
 - Look into optimised collision handling (perhaps ```Entity```s have a collided() function?)
+- Texture Atlas support for ```Entity```s etc. also asset manager integration.
 
 Entity Example
 =======
@@ -85,6 +86,7 @@ Want to load an ogmo level?
     
     //Load all entities with Z-Layer 2
     //GDXPunk uses Entity Lookup dictionary classes to decode the information
+    //If you wanted to, you can write your own clever lookup using reflection!
     add(ogmo.loadEntityLayer("entities", 2, new TestEntityLookup()));
         
 Input Management
@@ -108,39 +110,9 @@ Want to make a new game?
         @Override
         public void create() 
       	{
-      	    super.create(480, 320);
+      	    super.create(480, 320); //Screen res (virtual)
       		
-              changeWorld(new TestWorld());
+            changeWorld(new TestWorld());
       	}
       
-      	@Override
-      	public void dispose()
-      	{
-      	    super.dispose();
-      	}
-      
-      	@Override
-      	public void render()
-      	{		
-      	    super.render();
-      	}
-      	
-      	@Override
-      	public void update()
-      	{
-      	    super.update();
-      	}
-      
-      	@Override
-      	public void resize(int width, int height) {
-      	    super.resize(width, height);
-      	}
-      
-      	@Override
-      	public void pause() {
-      	}
-      
-      	@Override
-      	public void resume() {
-      	}
     }
