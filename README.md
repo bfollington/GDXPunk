@@ -52,6 +52,8 @@ Planned Features:
   - Use Line as graphic
   - Creating animations from a sequence of single images
   - Loading textures from atlases (for Entities or TileLayers)
+  - Optimised caching of types for faster collisions
+  - Option for unbounded collisions
 - ```TileLayers```
   - Optional polygonal tilemap collisions for slopes etc.
 - Implement chunky pixel rendering using render to texture 
