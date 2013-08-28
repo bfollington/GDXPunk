@@ -27,8 +27,6 @@ public class World {
     private ArrayList<Entity> entities = new ArrayList<Entity>();
     private ArrayList<Group> groups = new ArrayList<Group>();
     
-    protected World parent = null;
-    
     private BitmapFont font = new BitmapFont(Gdx.files.internal("data/font.fnt"),
                                              Gdx.files.internal("data/font.png"),
                                              true);
@@ -59,7 +57,6 @@ public class World {
         if (!entities.contains(e))
         {
             entities.add(e);
-            e.container = this;
             e.world = this;
         }
         
@@ -116,25 +113,11 @@ public class World {
         for (int i = 0; i < g.size(); i++)
         {
             entities.add(g.get(i));
-            g.get(i).container = this;
             g.get(i).world = this;
             
             setUpRendering(g.get(i));
             g.get(i).added();
         }
-    }
-    
-    /**
-     * Retrieve the highest level parent of the container.
-     * @return Highest level parent (a.k.a. world)
-     */
-    public World getParent()
-    {
-        if (parent == null)
-        {
-            return this;
-        }
-        else return parent.getParent();
     }
     
     /**
@@ -145,17 +128,6 @@ public class World {
     {
         t.world = this;
         tileLayers.put(t.layer, t);
-    }
-    
-    /**
-     * Called when a container is added to a container
-     */
-    public void added()
-    {
-        for (Entity e : entities)
-        {
-            e.world = getParent();
-        }
     }
     
     /**

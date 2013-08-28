@@ -61,10 +61,9 @@ public class Entity {
     //Layers to collide with
     private ArrayList<TileLayer> collision = new ArrayList<TileLayer>();
     
-    //Container
+    //World
     private int layer = 0;
     public World world;
-    public World container;
     
     public Entity() {
         this(0, 0, "");
